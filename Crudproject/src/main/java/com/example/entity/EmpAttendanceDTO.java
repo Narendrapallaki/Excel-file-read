@@ -13,7 +13,7 @@ import lombok.Data;
 @Data
 public class EmpAttendanceDTO {
     private String empName;
-    private String empId;
+    private Long empId;
     private String date;
     private String inTime;
     private String outTime;
@@ -21,7 +21,7 @@ public class EmpAttendanceDTO {
     private String grossHours;
     private String status;
     private String workingDayStatus;
-    private String dayOfWeek;
+    private double OnTimeArrival;
 
     public EmpAttendanceDTO(EmpAttendance attendance) {
         this.empName = attendance.getEmpName();
@@ -33,7 +33,7 @@ public class EmpAttendanceDTO {
         this.grossHours = attendance.getGrossHours();
         this.status = attendance.getStatus();
         this.workingDayStatus = attendance.getWorkingDayStatus();
-        this.dayOfWeek = formatDayOfWeek(attendance.getDate());
+     
     }
 
     private String formatDate(LocalDate date) {

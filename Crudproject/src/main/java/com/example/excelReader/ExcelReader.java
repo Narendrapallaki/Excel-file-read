@@ -13,6 +13,7 @@ import java.util.Map;
 import java.util.UUID;
 
 import org.apache.poi.ss.usermodel.Cell;
+import org.apache.poi.ss.usermodel.CellType;
 import org.apache.poi.ss.usermodel.Row;
 import org.apache.poi.ss.usermodel.Sheet;
 import org.apache.poi.ss.usermodel.Workbook;
@@ -60,7 +61,7 @@ public class ExcelReader {
                 }
 
                 EmpAttendance attendance = new EmpAttendance();
-                attendance.setEmpId(UUID.randomUUID().toString()); // Set unique identifier
+              //  attendance.setEmpId(UUID.randomUUID().toString()); // Set unique identifier
 
                 LocalDateTime inDateTime = null;
                 LocalDateTime outDateTime = null;
@@ -74,7 +75,22 @@ public class ExcelReader {
                                 attendance.setEmpName(cell.getStringCellValue());
                                 break;
                             case "empId":
-                                attendance.setEmpId(cell.getStringCellValue());
+                             //  attendance.setEmpId((long) cell.getNumericCellValue());
+                            	
+                            	if (cell.getCellType() == CellType.STRING) {
+                            	    // If cell is a string, convert it to long if possible
+                            	    try {
+                            	        attendance.setEmpId(Long.parseLong(cell.getStringCellValue()));
+                            	    } catch (NumberFormatException e) {
+                            	        // Handle if the string cannot be parsed to a long
+                            	        // Log an error or throw an exception as needed
+                            	    }
+                            	} else if (cell.getCellType() == CellType.NUMERIC) {
+                            	    // If cell is numeric, retrieve long value directly
+                            	    attendance.setEmpId((long) cell.getNumericCellValue());
+                            	} else {
+                            	    // Handle other types as needed (boolean, formula, etc.)
+                            	}
                                 break;
                             case "date":
                                 attendance.setDate(cell.getLocalDateTimeCellValue().toLocalDate());
@@ -95,11 +111,13 @@ public class ExcelReader {
                         }
                     }
                 }
+                
 
                 if (inDateTime != null && outDateTime != null) {
-                    if (outDateTime.isBefore(inDateTime)) {
-                        outDateTime = outDateTime.plusDays(1);
-                    }
+                    // Check if outDateTime is before inDateTime, if so, add one day to outDateTime
+//                    if (outDateTime.isBefore(inDateTime)) {
+//                        outDateTime = outDateTime.plusDays(1);
+//                    }
 
                     Duration effectiveDuration = Duration.between(inDateTime, outDateTime);
                     String effectiveHours = formatDuration(effectiveDuration);

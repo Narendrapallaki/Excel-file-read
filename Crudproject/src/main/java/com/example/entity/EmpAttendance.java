@@ -25,7 +25,7 @@ public class EmpAttendance {
 	    @GeneratedValue(strategy = GenerationType.IDENTITY)
 	    private Long id;
 	    private String empName;
-	    private String empId;
+	    private Long empId;
 	    private LocalDate date;
 	    private String inTime;
 	    private String outTime;
@@ -34,6 +34,7 @@ public class EmpAttendance {
 	    private String status;
 	    private String workingDayStatus;
 	  
+	   
 	   
 
 }

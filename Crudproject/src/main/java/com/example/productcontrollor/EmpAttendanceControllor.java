@@ -1,6 +1,7 @@
 package com.example.productcontrollor;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import com.example.entity.AvgDto;
 import com.example.entity.EmpAttendance;
 import com.example.entity.EmpAttendanceDTO;
 import com.example.productservice.EmpAttendanceService;
@@ -93,7 +95,7 @@ public class EmpAttendanceControllor {
 	
 	
 	@GetMapping("/getById/{empid}")
-	public ResponseEntity<List<EmpAttendanceDTO>>getByEmpid(@PathVariable("empid") String empid)
+	public ResponseEntity<List<EmpAttendanceDTO>>getByEmpid(@PathVariable("empid") Long empid)
 	
 	{
 		log.info("emp id {}",empid);
@@ -105,6 +107,24 @@ public class EmpAttendanceControllor {
 			
 		} else {
               return new ResponseEntity<>(byEmpId, HttpStatus.NOT_FOUND);
+		}
+		
+	}
+	
+	@GetMapping("/getAvg/{empid}/{startDate}/{enDate}")
+	public ResponseEntity<List<AvgDto>>getAverageArival(@PathVariable("empid") Long empid,
+			
+			@PathVariable("startDate") LocalDate startDate,@PathVariable("enDate") LocalDate enDate
+			)
+	
+	{
+		List<AvgDto> avgDto = empAttendanceService.getAvgDto(empid, startDate, enDate);
+		if (avgDto!=null) {
+			
+			return new ResponseEntity<>(avgDto, HttpStatus.OK);
+			
+		} else {
+              return new ResponseEntity<>(avgDto, HttpStatus.NOT_FOUND);
 		}
 		
 	}
